@@ -1,0 +1,40 @@
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+#define SERVOMIN  150
+#define SERVOMAX  600
+
+void setServoAngle(uint8_t channel, int angle) {
+  int pulse = map(angle, 0, 180, SERVOMIN, SERVOMAX);
+  pwm.setPWM(channel, 0, pulse);
+}
+
+void setup() {
+  Wire.begin(21, 22);   // SDA, SCL for ESP32
+  pwm.begin();
+  pwm.setPWMFreq(50);   // 50Hz for servo
+  delay(10);
+}
+
+void loop() {
+
+  // Move all 5 servos to 0°
+  for(int ch = 0; ch < 5; ch++) {
+    setServoAngle(ch, 0);
+  }
+  delay(1000);
+
+  // Move all 5 servos to 90°
+  for(int ch = 0; ch < 5; ch++) {
+    setServoAngle(ch, 90);
+  }
+  delay(1000);
+
+  // Move all 5 servos to 180°
+  for(int ch = 0; ch < 5; ch++) {
+    setServoAngle(ch, 180);
+  }
+  delay(1000);
+}
