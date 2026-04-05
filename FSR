@@ -1,0 +1,48 @@
+#include <WiFi.h>
+#include <HTTPClient.h>
+
+const char* ssid = "moto";
+const char* password = "HEYMOTO";
+
+// Your Google Script URL
+String serverName = "https://script.google.com/macros/s/AKfycbzAOmJxBzli2WYXBgiVONWpp5-M_MIT_J5I7SX0e8QKqLvvrwIRmkYD-dDOJB8pQcEp/exec";
+
+int fsrPin = 34;
+
+void setup() {
+  Serial.begin(115200);
+
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWiFi Connected!");
+}
+
+void loop() {
+  if (WiFi.status() == WL_CONNECTED) {
+
+    int fsrValue = analogRead(fsrPin);
+    Serial.print("FSR Value: ");
+    Serial.println(fsrValue);
+
+    HTTPClient http;
+
+    // Create full URL
+    String url = serverName + "?value=" + String(fsrValue);
+
+    http.begin(url);
+    int httpResponseCode = http.GET();
+
+    Serial.print("Response: ");
+    Serial.println(httpResponseCode);
+
+    http.end();
+  }
+
+  delay(5000);  // Send every 5 seconds
+}
