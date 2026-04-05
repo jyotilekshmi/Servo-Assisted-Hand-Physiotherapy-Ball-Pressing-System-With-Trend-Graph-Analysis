@@ -1,0 +1,25 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load data
+data = pd.read_csv("E:/ktu notes/FSR VALUES FINAL.csv")
+
+# Rename columns (important)
+data.columns = ["Week", "Session", "PeakFSR", "AvgFSR"]
+
+print(data)
+
+# Plot
+plt.figure()
+
+plt.plot(data["Session"], data["PeakFSR"], marker='o', label="Peak FSR")
+plt.plot(data["Session"], data["AvgFSR"], marker='s', label="Average FSR")
+
+plt.xlabel("Session")
+plt.ylabel("FSR Value (0-4095)")
+plt.title("FSR Sensor Trend Analysis")
+
+plt.legend()
+plt.grid()
+
+plt.show()
